@@ -1,0 +1,9 @@
+{
+    "name": "HitBoxes",
+    "version": "1.0.0",
+    "author": "Spencer Rawls",
+    "description": "This is a library and framework for hitboxes, hurtboxes, and status effects.",
+    "displayName": "Hit Boxes and Status Effects",
+    "unity": "2020.3.11f1",
+    "dependencies": {}
+}

@@ -1,0 +1,16 @@
+{
+    "name": "com.srawls1.HitBoxes",
+    "rootNamespace": "",
+    "references": [
+        "GUID:027f1933c56ca5b41936f9e88442a2c1"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
