@@ -4,7 +4,11 @@ public class BasicDamageAcceptor : DamageAcceptor
 {
 	[SerializeField] private int m_maxHP;
 
-	public int maxHP { get; private set; }
+	public int maxHP
+	{
+		get { return m_maxHP; }
+		private set { m_maxHP = value; }
+	}
 	public int currentHP { get; private set; }
 
 	public event DamageTakenEvent OnDamageTaken;
