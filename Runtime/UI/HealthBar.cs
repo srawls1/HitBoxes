@@ -31,6 +31,10 @@ public class HealthBar : MonoBehaviour
     private void Awake()
     {
         slider = GetComponent<Slider>();
+    }
+
+    private void Start()
+    {
         damageAcceptor = damageAcceptor;
     }
 
