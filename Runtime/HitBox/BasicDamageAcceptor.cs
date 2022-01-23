@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BasicDamageAcceptor : DamageAcceptor
 {
-	[SerializeField] private int maxHP;
+	[SerializeField] private int m_maxHP;
 
-	private int currentHP;
+	public int maxHP { get; private set; }
+	public int currentHP { get; private set; }
 
 	public event DamageTakenEvent OnDamageTaken;
 	public event HealedEvent OnHealed;

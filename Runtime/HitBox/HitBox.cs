@@ -3,37 +3,31 @@ using UnityEngine;
 
 public class HitBox : MonoBehaviour
 {
-	[SerializeField] private bool allowPenetration;
+    #region Editor Fields
+
+    [SerializeField] private bool allowPenetration;
 	[SerializeField] private float damage;
 	[SerializeField] private float knockback;
 	[SerializeField] private Vector3 direction;
 	[SerializeField] private DamageType type;
 	[SerializeField] private List<DamageInterceptorScriptableObject> interceptorObjects;
 
+    #endregion // Editor Fields
+
+    #region Non-Editor Fields
+
+    private bool initialized;
 	private List<Pair<DamageInterceptor, int>> interceptors;
 	private HashSet<HurtBox> alreadyHurtBoxes;
 	private List<HurtBox> currentlyOverlappedHurtboxes;
 
-	public void AddDamageInterceptor(DamageInterceptor interceptor, int priority)
-	{
-		interceptors.Add(new Pair<DamageInterceptor, int>(interceptor, priority));
-	}
+    #endregion // Non-Editor Fields
 
-	public void RemoveDamageInterceptor(DamageInterceptor interceptor)
-	{
-		interceptors.RemoveAll((pair) => pair.First == interceptor);
-	}
+    #region Unity Functions
 
-	private void Awake()
+    private void Awake()
 	{
-		interceptors = new List<Pair<DamageInterceptor, int>>();
-		for (int i = 0; i < interceptorObjects.Count; ++i)
-		{
-			interceptors.Add(new Pair<DamageInterceptor, int>(interceptorObjects[i].Process, interceptorObjects[i].priority));
-		}
-
-		alreadyHurtBoxes = new HashSet<HurtBox>();
-		currentlyOverlappedHurtboxes = new List<HurtBox>();
+		Initialize();
 	}
 
 	private void Update()
@@ -102,6 +96,30 @@ public class HitBox : MonoBehaviour
 		}
 	}
 
+	#endregion // Unity Functions
+
+	#region Public Functions
+
+	public void AddDamageInterceptor(DamageInterceptor interceptor, int priority)
+	{
+		Initialize();
+		if (interceptors == null)
+		{
+			interceptors = new List<Pair<DamageInterceptor, int>>();
+		}
+		interceptors.Add(new Pair<DamageInterceptor, int>(interceptor, priority));
+	}
+
+	public void RemoveDamageInterceptor(DamageInterceptor interceptor)
+	{
+		Initialize();
+		interceptors.RemoveAll((pair) => pair.First == interceptor);
+	}
+
+	#endregion // Public Functions
+
+	#region Private Functions
+
 	private void ProcessHit(HurtBox hurtBox)
 	{
 		Damage.Builder builder = new Damage.Builder(type, this, hurtBox);
@@ -109,6 +127,24 @@ public class HitBox : MonoBehaviour
 		PreprocessHit(builder);
 		Damage damage = builder.Build();
 		hurtBox.TakeDamage(damage);
+	}
+
+	private void Initialize()
+    {
+		if (initialized)
+        {
+			return;
+        }
+
+		interceptors = new List<Pair<DamageInterceptor, int>>();
+		for (int i = 0; i < interceptorObjects.Count; ++i)
+		{
+			interceptors.Add(new Pair<DamageInterceptor, int>(interceptorObjects[i].Process, interceptorObjects[i].priority));
+		}
+
+		alreadyHurtBoxes = new HashSet<HurtBox>();
+		currentlyOverlappedHurtboxes = new List<HurtBox>();
+		initialized = true;
 	}
 
 	private void PreprocessHit(Damage.Builder builder)
@@ -122,4 +158,6 @@ public class HitBox : MonoBehaviour
 			builder.WithInterceptor(interceptors[i].First, interceptors[i].Second);
 		}
 	}
+
+    #endregion // Private Functions
 }
