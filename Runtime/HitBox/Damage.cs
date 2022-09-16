@@ -46,7 +46,7 @@ public class Damage
 			this.type = type;
 			this.hitbox = hitbox;
 			this.hurtbox = hurtbox;
-			interceptors = new PriorityQueue<ComparablePair<int, DamageInterceptor>>();
+			interceptors = new MinHeapPriorityQueue<ComparablePair<int, DamageInterceptor>>();
 			effects = new List<AttackEffect>();
 			tags = new HashSet<string>();
 		}
