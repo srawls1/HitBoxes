@@ -1,0 +1,45 @@
+using UnityEngine;
+
+public class StandardGun : AbstractGun
+{
+	#region Editor Fields
+
+	[SerializeField] private Transform bulletSpawnPoint;
+	[SerializeField] private AbstractProjectile projectilePrefab;
+	[SerializeField] private int ammoCost;
+
+	#endregion // Editor Fields
+
+	#region Private Fields
+
+	private AmmoPool ammoPool;
+
+	#endregion // Private Fields
+
+	#region Unity Functions
+
+	new protected void Awake()
+	{
+		base.Awake();
+		ammoPool = GetComponentInParent<AmmoPool>();
+		ObjectRecycler.instance.RegisterObject(projectilePrefab.gameObject);
+	}
+
+	#endregion // Unity Functions
+
+	#region Abstract Gun Overrides
+
+	protected override bool loaded => ammoPool.CanUse(ammoCost);
+
+	protected override void Fire()
+	{
+		GameObject projectileGO = ObjectRecycler.instance.GetInstance(projectilePrefab.name,
+			bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+		AbstractProjectile projectile = projectileGO.GetComponent<AbstractProjectile>();
+		projectile.instigator = this;
+		projectile.OnShoot();
+		ammoPool.UseAmmo(ammoCost);
+	}
+
+	#endregion // Abstract Gun Overrides
+}
