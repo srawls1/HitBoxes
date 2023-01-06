@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class BasicDamageAcceptor : DamageAcceptor
 {
@@ -25,7 +26,6 @@ public class BasicDamageAcceptor : DamageAcceptor
 		OnDeath += () =>
 		{
 			Debug.Log("Dead");
-			gameObject.SetActive(false);
 		};
 	}
 
