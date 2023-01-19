@@ -4,8 +4,8 @@ public abstract class AbstractGun : Weapon
 {
     #region Editor Fields
 
-	[SerializeField] private bool continuousFire;
-	[SerializeField] private float cooldownTime;
+	[SerializeField] private bool m_continuousFire;
+	[SerializeField] private float m_cooldownTime;
 
 	#endregion // Editor Fields
 
@@ -16,6 +16,28 @@ public abstract class AbstractGun : Weapon
 	private bool shootHeld;
 
 	#endregion // Private Fields
+
+	#region Properties
+
+	public bool continuousFire
+	{
+		get { return m_continuousFire; }
+		set
+		{
+			m_continuousFire = value;
+		}
+	}
+
+	public float cooldownTime
+	{
+		get { return m_cooldownTime; }
+		set
+		{
+			m_cooldownTime = value;
+		}
+	}
+
+	#endregion // Properties
 
 	#region Unity Functions
 
