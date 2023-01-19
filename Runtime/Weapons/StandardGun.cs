@@ -5,7 +5,7 @@ public class StandardGun : AbstractGun
 	#region Editor Fields
 
 	[SerializeField] private Transform bulletSpawnPoint;
-	[SerializeField] private AbstractProjectile projectilePrefab;
+	[SerializeField] private AbstractProjectile m_projectilePrefab;
 	[SerializeField] private int ammoCost;
 
 	#endregion // Editor Fields
@@ -15,6 +15,20 @@ public class StandardGun : AbstractGun
 	private AmmoPool ammoPool;
 
 	#endregion // Private Fields
+
+	#region Properties
+
+	public AbstractProjectile projectilePrefab
+	{
+		get { return m_projectilePrefab; }
+		set
+		{
+			m_projectilePrefab = value;
+			ObjectRecycler.instance.RegisterObject(projectilePrefab.gameObject);
+		}
+	}
+
+	#endregion // Properties
 
 	#region Unity Functions
 
