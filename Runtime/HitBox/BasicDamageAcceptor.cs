@@ -8,7 +8,16 @@ public class BasicDamageAcceptor : DamageAcceptor
 	public int maxHP
 	{
 		get { return m_maxHP; }
-		private set { m_maxHP = value; }
+		set
+		{
+			int diff = value - m_maxHP;
+			m_maxHP = value;
+
+			if (diff > 0)
+			{
+				AcceptHealing(diff);
+			}
+		}
 	}
 	public int currentHP { get; private set; }
 
