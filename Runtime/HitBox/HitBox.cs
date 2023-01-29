@@ -39,7 +39,7 @@ public class HitBox : MonoBehaviour
 		for (int i = 0; i < currentlyOverlappedHurtboxes.Count; ++i)
 		{
 			HurtBox hurtBox = currentlyOverlappedHurtboxes[i];
-			if (alreadyHurtBoxes.Contains(hurtBox))
+			if (!hurtBox.enabled || alreadyHurtBoxes.Contains(hurtBox))
 			{
 				continue;
 			}
