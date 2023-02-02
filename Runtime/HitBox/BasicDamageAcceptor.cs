@@ -28,18 +28,15 @@ public class BasicDamageAcceptor : DamageAcceptor
 	private void Awake()
 	{
 		currentHP = maxHP;
-		OnDamageTaken += (hp, max, damage, type) =>
-		{
-			Debug.Log(string.Format("Took {0} {1}-type damage. Current HP = {2}, Max = {3}.", damage, type, hp, max));
-		};
-		OnDeath += () =>
-		{
-			Debug.Log("Dead");
-		};
 	}
 
 	public override void AcceptDamage(int damage, DamageType type)
 	{
+		if (currentHP == 0)
+		{
+			return;
+		}
+
 		currentHP = Mathf.Clamp(currentHP - damage, 0, maxHP);
 		OnDamageTaken?.Invoke(currentHP, maxHP, damage, type);
 

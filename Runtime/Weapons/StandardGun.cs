@@ -6,7 +6,7 @@ public class StandardGun : AbstractGun
 
 	[SerializeField] private Transform bulletSpawnPoint;
 	[SerializeField] private AbstractProjectile m_projectilePrefab;
-	[SerializeField] private AudioClip shotClip;
+	[SerializeField] private AudioClip[] shotSounds;
 	[SerializeField] private int ammoCost;
 
 	#endregion // Editor Fields
@@ -14,7 +14,6 @@ public class StandardGun : AbstractGun
 	#region Private Fields
 
 	private AmmoPool ammoPool;
-	private AudioSource audioSource;
 
 	#endregion // Private Fields
 
@@ -38,7 +37,6 @@ public class StandardGun : AbstractGun
 	{
 		base.Awake();
 		ammoPool = GetComponentInParent<AmmoPool>();
-		audioSource = GetComponentInParent<AudioSource>();
 		ObjectRecycler.instance.RegisterObject(projectilePrefab.gameObject);
 	}
 
@@ -56,7 +54,8 @@ public class StandardGun : AbstractGun
 		projectile.instigator = this;
 		projectile.OnShoot();
 		ammoPool.UseAmmo(ammoCost);
-		audioSource.PlayOneShot(shotClip);
+		SoundManager.GetSoundManagerByChannel(SoundChannel.SoundEffects)
+			.PlayRandomSoundFromList(shotSounds);
 	}
 
 	#endregion // Abstract Gun Overrides
