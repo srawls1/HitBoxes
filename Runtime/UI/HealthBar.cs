@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
@@ -19,10 +18,10 @@ public class HealthBar : MonoBehaviour
             }
 
             m_damageAcceptor = value;
-            UpdateHealth(m_damageAcceptor.currentHP, m_damageAcceptor.maxHP, 0, DamageType.Slash);
 
             if (m_damageAcceptor != null)
             {
+                UpdateHealth(m_damageAcceptor.currentHP, m_damageAcceptor.maxHP, 0, DamageType.Slash);
                 m_damageAcceptor.OnDamageTaken += UpdateHealth;
             }
         }
