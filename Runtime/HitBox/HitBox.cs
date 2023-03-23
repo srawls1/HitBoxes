@@ -121,6 +121,12 @@ public class HitBox : MonoBehaviour
 		interceptors.RemoveAll((pair) => pair.First == interceptor);
 	}
 
+	public void RemoveAllDamageInterceptors()
+	{
+		Initialize();
+		interceptors.Clear();
+	}
+
 	#endregion // Public Functions
 
 	#region Private Functions

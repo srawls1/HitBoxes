@@ -54,6 +54,11 @@ public class HurtBox : MonoBehaviour
 		armorEffects.RemoveAll((pair) => pair.First == interceptor);
 	}
 
+	public void RemoveAllDamageInterceptors()
+	{
+		armorEffects.Clear();
+	}
+
 	public void PreprocessHit(Damage.Builder builder)
 	{
 		float armor;
