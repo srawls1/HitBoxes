@@ -141,7 +141,7 @@ public class Damage
 			}
 
 			return new Damage(hitbox, hurtbox, type,
-				Mathf.Max(Mathf.RoundToInt(damage - armor), 1),
+				Mathf.Max(Mathf.RoundToInt(damage - armor), 0),
 				Mathf.Max(knockback - poise, 0f) * direction,
 				effects.AsReadOnly(), tags);
 		}
