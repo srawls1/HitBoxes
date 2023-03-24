@@ -63,6 +63,11 @@ public class HitBox : MonoBehaviour
 		alreadyHurtBoxes.Clear();
 	}
 
+	public void OnObjectRecycled()
+	{
+		currentlyOverlappedHurtboxes.Clear();
+	}
+
 	private void OnTriggerEnter2D(Collider2D other)
 	{
 		HurtBox hurtBox = other.GetComponent<HurtBox>();
