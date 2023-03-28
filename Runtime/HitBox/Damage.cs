@@ -10,6 +10,7 @@ public class Damage
 	public readonly Vector3 knockbackVector;
 	public readonly IReadOnlyList<AttackEffect> effects;
 	private readonly HashSet<string> tags;
+	public int damageDealt { get; set; }
 
 	private Damage(HitBox hitbox, HurtBox hurtbox, DamageType type, int damage, Vector3 knockbackVector, IReadOnlyList<AttackEffect> effects, HashSet<string> tags)
 	{

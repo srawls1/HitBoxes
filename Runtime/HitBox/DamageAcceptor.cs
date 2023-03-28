@@ -8,6 +8,6 @@ public delegate void DeathEvent();
 
 public abstract class DamageAcceptor : MonoBehaviour
 {
-	public abstract void AcceptDamage(int damage, DamageType type);
-	public abstract void AcceptHealing(int amount);
+	public abstract int AcceptDamage(int damage, DamageType type);
+	public abstract int AcceptHealing(int amount);
 }

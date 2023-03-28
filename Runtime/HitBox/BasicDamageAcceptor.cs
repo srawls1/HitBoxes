@@ -30,14 +30,15 @@ public class BasicDamageAcceptor : DamageAcceptor
 		currentHP = maxHP;
 	}
 
-	public override void AcceptDamage(int damage, DamageType type)
+	public override int AcceptDamage(int damage, DamageType type)
 	{
 		if (currentHP == 0)
 		{
-			return;
+			return 0;
 		}
 
-		currentHP = Mathf.Clamp(currentHP - damage, 0, maxHP);
+		int damageTaken = Mathf.Min(damage, currentHP);
+		currentHP = Mathf.Clamp(currentHP - damageTaken, 0, maxHP);
 		OnDamageTaken?.Invoke(currentHP, maxHP, damage, type);
 
 		if (currentHP == 0)
@@ -45,16 +46,16 @@ public class BasicDamageAcceptor : DamageAcceptor
 			currentHP = 0;
 			OnDeath?.Invoke();
 		}
+
+		return damageTaken;
 	}
 
-	public override void AcceptHealing(int amount)
+	public override int AcceptHealing(int amount)
 	{
-		currentHP += amount;
-		if (currentHP > maxHP)
-		{
-			currentHP = maxHP;
-		}
+		int amountHealed = Mathf.Min(amount, maxHP - currentHP);
+		currentHP += amountHealed;
 
 		OnHealed?.Invoke(currentHP, maxHP, amount);
+		return amountHealed;
 	}
 }

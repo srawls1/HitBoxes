@@ -76,7 +76,7 @@ public class HurtBox : MonoBehaviour
 
 	public void TakeDamage(Damage damage)
 	{
-		damageAcceptor.AcceptDamage(damage.damage, damage.type);
+		damage.damageDealt = damageAcceptor.AcceptDamage(damage.damage, damage.type);
 		knockbackAcceptor.AcceptKnockback(damage.knockbackVector);
 
 		for (int i = 0; i < damage.effects.Count; ++i)
