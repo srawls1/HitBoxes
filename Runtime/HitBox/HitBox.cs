@@ -60,12 +60,8 @@ public class HitBox : MonoBehaviour
 
 	private void OnEnable()
 	{
-		alreadyHurtBoxes.Clear();
-	}
-
-	public void OnObjectRecycled()
-	{
 		currentlyOverlappedHurtboxes.Clear();
+		alreadyHurtBoxes.Clear();
 	}
 
 	private void OnTriggerEnter2D(Collider2D other)
