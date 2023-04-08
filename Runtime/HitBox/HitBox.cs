@@ -1,6 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public enum KnockbackType
+{
+	Radial,
+	DirectionOfVelocity,
+	FixedDirection
+}
+
 public class HitBox : MonoBehaviour
 {
     #region Editor Fields
@@ -8,6 +15,7 @@ public class HitBox : MonoBehaviour
     [SerializeField] private bool allowPenetration;
 	[SerializeField] private float damage;
 	[SerializeField] private float knockback;
+	[SerializeField] private KnockbackType knockbackType;
 	[SerializeField] private Vector3 direction;
 	[SerializeField] private DamageType type;
 	[SerializeField] private List<DamageInterceptorScriptableObject> interceptorObjects;
@@ -17,6 +25,7 @@ public class HitBox : MonoBehaviour
     #region Non-Editor Fields
 
     private bool initialized;
+	new private Rigidbody rigidbody;
 	private List<Pair<DamageInterceptor, int>> interceptors;
 	private HashSet<HurtBox> alreadyHurtBoxes;
 	private List<HurtBox> currentlyOverlappedHurtboxes;
@@ -148,6 +157,7 @@ public class HitBox : MonoBehaviour
 			return;
         }
 
+		rigidbody = GetComponent<Rigidbody>();
 		interceptors = new List<Pair<DamageInterceptor, int>>();
 		for (int i = 0; i < interceptorObjects.Count; ++i)
 		{
@@ -162,13 +172,33 @@ public class HitBox : MonoBehaviour
 	private void PreprocessHit(Damage.Builder builder)
 	{
 		builder.WithDamage(damage)
-			.WithDirection(direction)
+			.WithDirection(GetKnockbackDirection(builder))
 			.WithKnockback(knockback);
 		
 		for (int i = 0; i < interceptors.Count; ++i)
 		{
 			builder.WithInterceptor(interceptors[i].First, interceptors[i].Second);
 		}
+	}
+
+	private Vector3 GetKnockbackDirection(Damage.Builder builder)
+	{
+		switch (knockbackType)
+		{
+			case KnockbackType.FixedDirection:
+				return direction;
+			case KnockbackType.DirectionOfVelocity:
+				if (!rigidbody)
+				{
+					Debug.LogError("This HitBox has knockbackType of DirectionOfVelocity but there is no rigidbody component attached. Defaulting to no knockback.");
+					return Vector3.zero;
+				}
+				return rigidbody.velocity;
+			case KnockbackType.Radial:
+				return (builder.hurtbox.transform.position - transform.position).normalized;
+		}
+
+		return Vector3.zero;
 	}
 
     #endregion // Private Functions
