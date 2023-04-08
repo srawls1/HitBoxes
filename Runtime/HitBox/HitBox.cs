@@ -157,7 +157,7 @@ public class HitBox : MonoBehaviour
 			return;
         }
 
-		rigidbody = GetComponent<Rigidbody>();
+		rigidbody = GetComponentInParent<Rigidbody>();
 		interceptors = new List<Pair<DamageInterceptor, int>>();
 		for (int i = 0; i < interceptorObjects.Count; ++i)
 		{
