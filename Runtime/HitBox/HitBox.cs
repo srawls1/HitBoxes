@@ -186,14 +186,14 @@ public class HitBox : MonoBehaviour
 		switch (knockbackType)
 		{
 			case KnockbackType.FixedDirection:
-				return direction;
+				return direction.normalized;
 			case KnockbackType.DirectionOfVelocity:
 				if (!rigidbody)
 				{
 					Debug.LogError("This HitBox has knockbackType of DirectionOfVelocity but there is no rigidbody component attached. Defaulting to no knockback.");
 					return Vector3.zero;
 				}
-				return rigidbody.velocity;
+				return rigidbody.velocity.normalized;
 			case KnockbackType.Radial:
 				return (builder.hurtbox.transform.position - transform.position).normalized;
 		}
