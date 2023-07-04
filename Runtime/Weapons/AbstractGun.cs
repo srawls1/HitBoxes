@@ -11,9 +11,9 @@ public abstract class AbstractGun : Weapon
 
 	#region Private Fields
 
-	private RelativeTime time;
-	private bool shotInCooldown;
-	private bool shootHeld;
+	protected RelativeTime time;
+	protected bool shotInCooldown;
+	protected bool shootHeld;
 
 	#endregion // Private Fields
 
