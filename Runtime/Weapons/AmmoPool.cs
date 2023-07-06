@@ -5,12 +5,18 @@ using UnityEngine;
 public class AmmoPool : MonoBehaviour
 {
 	[SerializeField] private int m_maxAmmo;
-	[SerializeField] private int currentAmmo;
+	[SerializeField] private int m_currentAmmo;
 
 	public int maxAmmo
 	{
 		get { return m_maxAmmo; }
 		set { m_maxAmmo = value; }
+	}
+
+	public int currentAmmo
+	{
+		get { return m_currentAmmo; }
+		set { m_currentAmmo = value; }
 	}
 
 	public bool CanUse(int cost)
