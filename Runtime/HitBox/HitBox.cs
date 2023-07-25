@@ -75,6 +75,11 @@ public class HitBox : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D other)
 	{
+		if (other.transform.root == transform.root)
+		{
+			return;
+		}
+
 		HurtBox hurtBox = other.GetComponent<HurtBox>();
 		if (hurtBox)
 		{
@@ -94,6 +99,11 @@ public class HitBox : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
+		if (other.transform.root == transform.root)
+		{
+			return;
+		}
+
 		HurtBox hurtBox = other.GetComponent<HurtBox>();
 		if (hurtBox)
 		{
