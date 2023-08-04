@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class BasicDamageAcceptor : DamageAcceptor
 {
 	[SerializeField] private int m_maxHP;
+	[SerializeField] private DamageTakenChannelSO channel;
 
 	public int maxHP
 	{
@@ -30,6 +31,22 @@ public class BasicDamageAcceptor : DamageAcceptor
 		currentHP = maxHP;
 	}
 
+	private void OnEnable()
+	{
+		if (channel)
+		{
+			OnDamageTaken += ForwardEventToChannel;
+		}
+	}
+
+	private void OnDisable()
+	{
+		if (channel)
+		{
+			OnDamageTaken -= ForwardEventToChannel;
+		}
+	}
+
 	public override int AcceptDamage(int damage, DamageType type)
 	{
 		if (currentHP == 0)
@@ -40,6 +57,7 @@ public class BasicDamageAcceptor : DamageAcceptor
 		int damageTaken = Mathf.Min(damage, currentHP);
 		currentHP = Mathf.Clamp(currentHP - damageTaken, 0, maxHP);
 		OnDamageTaken?.Invoke(currentHP, maxHP, damage, type);
+
 
 		if (currentHP == 0)
 		{
@@ -57,5 +75,16 @@ public class BasicDamageAcceptor : DamageAcceptor
 
 		OnHealed?.Invoke(currentHP, maxHP, amount);
 		return amountHealed;
+	}
+
+	private void ForwardEventToChannel(int currentHP, int maxHP, int damage, DamageType type)
+	{
+		channel.Broadcast(new DamageTakenParams()
+		{
+			currentHP = currentHP,
+			maxHP = maxHP,
+			damageTaken = damage,
+			type = type
+		});
 	}
 }
