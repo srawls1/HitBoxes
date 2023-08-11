@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     [SerializeField] private BasicDamageAcceptor m_damageAcceptor;
+    [SerializeField] private DamageTakenChannelSO channel;
 
     private Slider slider;
 
@@ -39,7 +40,28 @@ public class HealthBar : MonoBehaviour
         damageAcceptor = damageAcceptor;
     }
 
-    private void UpdateHealth(int newHP, int maxHP, int damage, DamageType type)
+	private void OnEnable()
+	{
+		if (channel)
+		{
+            channel.Subscribe(UpdateHealthFromChannel);
+		}
+	}
+
+	private void OnDisable()
+	{
+		if (channel)
+		{
+            channel.Unsubscribe(UpdateHealthFromChannel);
+		}
+	}
+
+    private void UpdateHealthFromChannel(DamageTakenParams parameters)
+	{
+        UpdateHealth(parameters.currentHP, parameters.maxHP, parameters.damageTaken, parameters.type);
+	}
+
+	private void UpdateHealth(int newHP, int maxHP, int damage, DamageType type)
     {
         slider.value = (float)newHP / maxHP;
     }

@@ -1,11 +1,52 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+public struct AmmoChangedParameters
+{
+	public int currentAmmo;
+	public int maxAmmo;
+	public int ammoUsed;
+}
 
 public class AmmoPool : MonoBehaviour
 {
-	[SerializeField] private int maxAmmo;
-	[SerializeField] private int currentAmmo;
+	[SerializeField] private int m_maxAmmo;
+	[SerializeField] private int m_currentAmmo;
+	[SerializeField] private UnityEvent<AmmoChangedParameters> m_ammoChangedEvent;
+	[SerializeField] private AmmoChangedChannelSO ammoChangedChannel;
+
+	public int maxAmmo
+	{
+		get { return m_maxAmmo; }
+		set { m_maxAmmo = value; }
+	}
+
+	public int currentAmmo
+	{
+		get { return m_currentAmmo; }
+		set { m_currentAmmo = value; }
+	}
+
+	public UnityEvent<AmmoChangedParameters> ammoChangedEvent
+	{
+		get { return m_ammoChangedEvent; }
+	}
+
+	private void OnEnable()
+	{
+		if (ammoChangedChannel)
+		{
+			ammoChangedEvent.AddListener(ammoChangedChannel.Broadcast);
+		}
+	}
+
+	private void OnDisable()
+	{
+		if (ammoChangedChannel)
+		{
+			ammoChangedEvent.RemoveListener(ammoChangedChannel.Broadcast);
+		}
+	}
 
 	public bool CanUse(int cost)
 	{
@@ -20,12 +61,25 @@ public class AmmoPool : MonoBehaviour
 		}
 
 		currentAmmo -= cost;
+		ammoChangedEvent.Invoke(new AmmoChangedParameters()
+		{
+			currentAmmo = currentAmmo,
+			maxAmmo = maxAmmo,
+			ammoUsed = cost
+		});
+
 		return true;
 	}
 
 	public void ReplenishAmmo(int amount)
 	{
 		currentAmmo = Mathf.Min(currentAmmo + amount, maxAmmo);
+		ammoChangedEvent.Invoke(new AmmoChangedParameters()
+		{
+			currentAmmo = currentAmmo,
+			maxAmmo = maxAmmo,
+			ammoUsed = -amount
+		});
 	}
 
 	public int GetCurrentUses(int cost)

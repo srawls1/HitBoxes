@@ -75,6 +75,10 @@ public class StatusEffectsContainer : MonoBehaviour
 
 	public void AddDealDamageInterceptor(string effectName, DamageInterceptor interceptor, int priority)
 	{
+		if (!hitbox)
+		{
+			return;
+		}
 		hitbox.AddDamageInterceptor(interceptor, priority);
 		AddExpireCallback(effectName, () => hitbox.RemoveDamageInterceptor(interceptor));
 	}
