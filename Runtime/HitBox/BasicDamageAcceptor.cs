@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class BasicDamageAcceptor : DamageAcceptor
@@ -36,6 +37,7 @@ public class BasicDamageAcceptor : DamageAcceptor
 		if (channel)
 		{
 			OnDamageTaken += ForwardEventToChannel;
+			OnHealed += ForwardHealEventToChannel;
 		}
 	}
 
@@ -85,6 +87,16 @@ public class BasicDamageAcceptor : DamageAcceptor
 			maxHP = maxHP,
 			damageTaken = damage,
 			type = type
+		});
+	}
+
+	private void ForwardHealEventToChannel(int newHP, int maxHP, int amount)
+	{
+		channel.Broadcast(new DamageTakenParams()
+		{
+			currentHP = newHP,
+			maxHP = maxHP,
+			damageTaken = -amount
 		});
 	}
 }
