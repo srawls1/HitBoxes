@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
@@ -15,6 +16,7 @@ public class HealthBar : MonoBehaviour
             if (m_damageAcceptor != null)
             {
                 m_damageAcceptor.OnDamageTaken -= UpdateHealth;
+                m_damageAcceptor.OnHealed -= UpdateHealth_Healed;
             }
 
             m_damageAcceptor = value;
@@ -27,7 +29,7 @@ public class HealthBar : MonoBehaviour
         }
     }
 
-    private void Awake()
+	private void Awake()
     {
         slider = GetComponent<Slider>();
     }
@@ -38,6 +40,11 @@ public class HealthBar : MonoBehaviour
     }
 
     private void UpdateHealth(int newHP, int maxHP, int damage, DamageType type)
+    {
+        slider.value = (float)newHP / maxHP;
+    }
+
+    private void UpdateHealth_Healed(int newHP, int maxHP, int amount)
     {
         slider.value = (float)newHP / maxHP;
     }
