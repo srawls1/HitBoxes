@@ -6,6 +6,8 @@ public class HealthBar : MonoBehaviour
 {
     [SerializeField] private BasicDamageAcceptor m_damageAcceptor;
     [SerializeField] private DamageTakenChannelSO channel;
+    [SerializeField] private bool adjustLengthWithMaxHP;
+    [SerializeField] private float pixelLengthPerHP;
 
     private Slider slider;
 
@@ -63,11 +65,24 @@ public class HealthBar : MonoBehaviour
 
 	private void UpdateHealth(int newHP, int maxHP, int damage, DamageType type)
     {
+        if (adjustLengthWithMaxHP)
+		{
+            RectTransform rectTransform = transform as RectTransform;
+            rectTransform.sizeDelta = new Vector2(pixelLengthPerHP * maxHP,
+                rectTransform.sizeDelta.y);
+        }
+        
         slider.value = (float)newHP / maxHP;
     }
 
     private void UpdateHealth_Healed(int newHP, int maxHP, int amount)
     {
+        if (adjustLengthWithMaxHP)
+		{
+            RectTransform rectTransform = transform as RectTransform;
+            rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, pixelLengthPerHP * maxHP);
+        }
+        
         slider.value = (float)newHP / maxHP;
     }
 }

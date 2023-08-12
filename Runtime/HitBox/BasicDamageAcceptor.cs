@@ -26,7 +26,7 @@ public class BasicDamageAcceptor : DamageAcceptor
 	public event DamageTakenEvent OnDamageTaken;
 	public event HealedEvent OnHealed;
 	public event DeathEvent OnDeath;
-
+	
 	private void Awake()
 	{
 		currentHP = maxHP;
