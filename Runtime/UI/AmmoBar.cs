@@ -5,6 +5,8 @@ public class AmmoBar : MonoBehaviour
 {
     [SerializeField] private AmmoPool m_ammoPool;
     [SerializeField] private AmmoChangedChannelSO channel;
+	[SerializeField] private bool adjustLengthWithMaxAmmo;
+	[SerializeField] private float pixelLengthPerAmmo;
 
 	private Slider slider;
 
@@ -60,6 +62,15 @@ public class AmmoBar : MonoBehaviour
 
 	private void UpdateAmmo(AmmoChangedParameters parameters)
 	{
+		if (adjustLengthWithMaxAmmo)
+		{
+			RectTransform rectTransform = transform as RectTransform;
+			float startingWidth = rectTransform.rect.width;
+			rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, pixelLengthPerAmmo * parameters.maxAmmo);
+			float endingWidth = rectTransform.rect.width;
+			rectTransform.position += Vector3.right * (endingWidth - startingWidth) * 0.5f;
+		}
+
 		slider.value = (float)parameters.currentAmmo / parameters.maxAmmo;
 	}
 }

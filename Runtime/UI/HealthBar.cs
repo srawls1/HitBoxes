@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
@@ -68,11 +67,13 @@ public class HealthBar : MonoBehaviour
         if (adjustLengthWithMaxHP)
 		{
             RectTransform rectTransform = transform as RectTransform;
-            rectTransform.sizeDelta = new Vector2(pixelLengthPerHP * maxHP,
-                rectTransform.sizeDelta.y);
-        }
-        
-        slider.value = (float)newHP / maxHP;
+			float startingWidth = rectTransform.rect.width;
+			rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, pixelLengthPerHP * maxHP);
+			float endingWidth = rectTransform.rect.width;
+			rectTransform.position += Vector3.right * (endingWidth - startingWidth) * 0.5f;
+		}
+
+		slider.value = (float)newHP / maxHP;
     }
 
     private void UpdateHealth_Healed(int newHP, int maxHP, int amount)

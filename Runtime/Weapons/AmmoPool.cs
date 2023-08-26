@@ -24,7 +24,7 @@ public class AmmoPool : MonoBehaviour
 	public int currentAmmo
 	{
 		get { return m_currentAmmo; }
-		set { m_currentAmmo = value; }
+		private set { m_currentAmmo = value; }
 	}
 
 	public UnityEvent<AmmoChangedParameters> ammoChangedEvent
