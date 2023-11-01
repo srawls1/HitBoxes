@@ -57,7 +57,7 @@ public class HitBox : MonoBehaviour
 				currentlyOverlappedHurtboxes.RemoveAt(i);
 				continue;
 			}
-			if (!hurtBox.enabled || alreadyHurtBoxes.Contains(hurtBox))
+			if (!hurtBox.enabled || hurtBox.inInvulnerabilityWindow || alreadyHurtBoxes.Contains(hurtBox))
 			{
 				continue;
 			}

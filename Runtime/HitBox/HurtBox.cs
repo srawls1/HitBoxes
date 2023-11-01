@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -14,13 +13,20 @@ public class HurtBox : MonoBehaviour
 	[SerializeField] private List<ArmorForType> armorByTypeList;
 	[SerializeField] private float poise;
 	[SerializeField] private List<DamageInterceptorScriptableObject> armorEffectObjects;
+	[SerializeField] private float invulnerabilityTimeBetweenDamage;
 
 	private Dictionary<DamageType, float> armorByType;
 	private List<Pair<DamageInterceptor, int>> armorEffects;
 	private DamageAcceptor damageAcceptor;
 	private KnockbackAcceptor knockbackAcceptor;
+	private RelativeTime time;
 
-	private void Awake()
+	public bool inInvulnerabilityWindow {
+		get;
+		private set;
+	}
+
+	private void OnEnable()
 	{
 		armorByType = new Dictionary<DamageType, float>();
 		for (int i = 0; i < armorByTypeList.Count; ++i)
@@ -37,6 +43,7 @@ public class HurtBox : MonoBehaviour
 		}
 		damageAcceptor = GetComponent<DamageAcceptor>();
 		knockbackAcceptor = GetComponent<KnockbackAcceptor>();
+		time = GetComponent<RelativeTime>();
 	}
 
 	public void AddDamageInterceptor(DamageInterceptorScriptableObject interceptor)
@@ -82,6 +89,12 @@ public class HurtBox : MonoBehaviour
 		for (int i = 0; i < damage.effects.Count; ++i)
 		{
 			damage.effects[i](damage);
+		}
+
+		if (damage.damageDealt > 0)
+		{
+			inInvulnerabilityWindow = true;
+			time.SetTimer(invulnerabilityTimeBetweenDamage, () => inInvulnerabilityWindow = false);
 		}
 	}
 }
