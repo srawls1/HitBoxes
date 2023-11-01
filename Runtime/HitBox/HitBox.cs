@@ -15,6 +15,9 @@ public class HitBox : MonoBehaviour
     [SerializeField] private bool allowPenetration;
 	[SerializeField] private float damage;
 	[SerializeField] private float knockback;
+	[SerializeField, Tooltip("It's actually period." +
+		"The time in seconds between damaging the same the hurtbox when they're still overlapping." +
+		"Set to 0 to not allow duplicate damaging at all.")] private float damageFrequency;
 	[SerializeField] private KnockbackType knockbackType;
 	[SerializeField] private Vector3 direction;
 	[SerializeField] private DamageType type;
@@ -25,6 +28,7 @@ public class HitBox : MonoBehaviour
     #region Non-Editor Fields
 
     private bool initialized;
+	private RelativeTime time;
 	new private Rigidbody rigidbody;
 	private List<Pair<DamageInterceptor, int>> interceptors;
 	private HashSet<HurtBox> alreadyHurtBoxes;
@@ -58,7 +62,7 @@ public class HitBox : MonoBehaviour
 				continue;
 			}
 
-			alreadyHurtBoxes.Add(hurtBox);
+			AddAlreadyHurtHurtbox(hurtBox);
 			ProcessHit(hurtBox);
 			if (!allowPenetration)
 			{
@@ -85,7 +89,6 @@ public class HitBox : MonoBehaviour
 		{
 			currentlyOverlappedHurtboxes.Add(hurtBox);
 		}
-		
 	}
 
 	private void OnTriggerExit2D(Collider2D other)
@@ -168,6 +171,7 @@ public class HitBox : MonoBehaviour
         }
 
 		rigidbody = GetComponentInParent<Rigidbody>();
+		time = GetComponentInParent<RelativeTime>();
 		interceptors = new List<Pair<DamageInterceptor, int>>();
 		for (int i = 0; i < interceptorObjects.Count; ++i)
 		{
@@ -177,6 +181,15 @@ public class HitBox : MonoBehaviour
 		alreadyHurtBoxes = new HashSet<HurtBox>();
 		currentlyOverlappedHurtboxes = new List<HurtBox>();
 		initialized = true;
+	}
+
+	private void AddAlreadyHurtHurtbox(HurtBox hurtBox)
+	{
+		alreadyHurtBoxes.Add(hurtBox);
+		if (damageFrequency > 0)
+		{
+			time.SetTimer(damageFrequency, () => alreadyHurtBoxes.Remove(hurtBox));
+		}
 	}
 
 	private void PreprocessHit(Damage.Builder builder)
