@@ -43,7 +43,7 @@ public class HurtBox : MonoBehaviour
 		}
 		damageAcceptor = GetComponent<DamageAcceptor>();
 		knockbackAcceptor = GetComponent<KnockbackAcceptor>();
-		time = GetComponent<RelativeTime>();
+		time = GetComponentInParent<RelativeTime>();
 	}
 
 	public void AddDamageInterceptor(DamageInterceptorScriptableObject interceptor)
