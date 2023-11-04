@@ -21,7 +21,7 @@ public class BasicDamageAcceptor : DamageAcceptor
 			}
 		}
 	}
-	public int currentHP { get; private set; }
+	public int currentHP { get; set; }
 
 	public event DamageTakenEvent OnDamageTaken;
 	public event HealedEvent OnHealed;
@@ -46,6 +46,7 @@ public class BasicDamageAcceptor : DamageAcceptor
 		if (channel)
 		{
 			OnDamageTaken -= ForwardEventToChannel;
+			OnHealed -= ForwardHealEventToChannel;
 		}
 	}
 
