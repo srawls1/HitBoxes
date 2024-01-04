@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[CreateAssetMenu(menuName = "Damage Interceptors/Conditional")]
 public class ConditionalDamageInterceptor : DamageInterceptorScriptableObject
 {
 	[SerializeField] private DamageInterceptorCondition condition;
