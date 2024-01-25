@@ -11,6 +11,7 @@ public class StatusEffectsContainer : MonoBehaviour
 
 	private HitBox hitbox;
 	private HurtBox hurtbox;
+	private BasicDamageAcceptor basicDamageAcceptor;
 
 	private void Awake()
 	{
@@ -87,6 +88,13 @@ public class StatusEffectsContainer : MonoBehaviour
 	{
 		hurtbox.AddDamageInterceptor(interceptor, priority);
 		AddExpireCallback(effectName, () => hurtbox.RemoveDamageInterceptor(interceptor));
+	}
+
+	public void AddOnDeathCallback(string effectName, DeathEvent callback)
+	{
+		BasicDamageAcceptor basicDamageAcceptor = GetComponent<BasicDamageAcceptor>();
+		basicDamageAcceptor.OnDeath += callback;
+		AddExpireCallback(effectName, () => basicDamageAcceptor.OnDeath -= callback);
 	}
 
 	public Action InflictDamage(DamageStruct damageInfo)
