@@ -44,7 +44,7 @@ public class StandardGun : AbstractGun
 
 	#region Abstract Gun Overrides
 
-	protected override bool loaded => ammoPool.CanUse(ammoCost);
+	public override bool loaded => ammoPool.CanUse(ammoCost);
 
 	protected override void Fire()
 	{

@@ -86,7 +86,7 @@ public abstract class AbstractGun : Weapon
 
 	#region Abstract Members
 
-	protected abstract bool loaded { get; }
+	public abstract bool loaded { get; }
 	protected abstract void Fire();
 
 	#endregion // Abstract Members
