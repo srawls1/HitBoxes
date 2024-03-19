@@ -27,6 +27,7 @@ public class HealthBar : MonoBehaviour
             {
                 UpdateHealth(m_damageAcceptor.currentHP, m_damageAcceptor.maxHP, 0, DamageType.Slash);
                 m_damageAcceptor.OnDamageTaken += UpdateHealth;
+                m_damageAcceptor.OnHealed += UpdateHealth_Healed;
             }
         }
     }
