@@ -26,7 +26,7 @@ public class HurtBox : MonoBehaviour
 		private set;
 	}
 
-	private void OnEnable()
+	private void Awake()
 	{
 		armorByType = new Dictionary<DamageType, float>();
 		for (int i = 0; i < armorByTypeList.Count; ++i)
