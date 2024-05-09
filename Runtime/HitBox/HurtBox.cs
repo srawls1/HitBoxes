@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [System.Serializable]
 public class ArmorForType
@@ -11,7 +12,7 @@ public class ArmorForType
 public class HurtBox : MonoBehaviour
 {
 	[SerializeField] private List<ArmorForType> armorByTypeList;
-	[SerializeField] private float poise;
+	[SerializeField, FormerlySerializedAs("poise")] private float m_poise;
 	[SerializeField] private List<DamageInterceptorScriptableObject> armorEffectObjects;
 	[SerializeField] private float invulnerabilityTimeBetweenDamage;
 
@@ -20,6 +21,12 @@ public class HurtBox : MonoBehaviour
 	private DamageAcceptor damageAcceptor;
 	private KnockbackAcceptor knockbackAcceptor;
 	private RelativeTime time;
+
+	public float poise
+	{
+		get { return m_poise; }
+		set { m_poise = value; }
+	}
 
 	public bool inInvulnerabilityWindow {
 		get;
@@ -44,6 +51,16 @@ public class HurtBox : MonoBehaviour
 		damageAcceptor = GetComponent<DamageAcceptor>();
 		knockbackAcceptor = GetComponent<KnockbackAcceptor>();
 		time = GetComponentInParent<RelativeTime>();
+	}
+
+	public float GetArmorForDamageType(DamageType damageType)
+	{
+		return armorByType[damageType];
+	}
+
+	public void SetArmorForDamageType(DamageType damageType, float armorValue)
+	{
+		armorByType[damageType] = armorValue;
 	}
 
 	public void AddDamageInterceptor(DamageInterceptorScriptableObject interceptor)
