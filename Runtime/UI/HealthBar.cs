@@ -71,7 +71,7 @@ public class HealthBar : MonoBehaviour
 			float startingWidth = rectTransform.rect.width;
 			rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, pixelLengthPerHP * maxHP);
 			float endingWidth = rectTransform.rect.width;
-			rectTransform.position += Vector3.right * (endingWidth - startingWidth) * 0.5f;
+			rectTransform.localPosition += Vector3.right * (endingWidth - startingWidth) * 0.5f;
 		}
 
 		slider.value = (float)newHP / maxHP;

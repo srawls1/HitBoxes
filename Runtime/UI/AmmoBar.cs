@@ -68,7 +68,7 @@ public class AmmoBar : MonoBehaviour
 			float startingWidth = rectTransform.rect.width;
 			rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, pixelLengthPerAmmo * parameters.maxAmmo);
 			float endingWidth = rectTransform.rect.width;
-			rectTransform.position += Vector3.right * (endingWidth - startingWidth) * 0.5f;
+			rectTransform.localPosition += Vector3.right * (endingWidth - startingWidth) * 0.5f;
 		}
 
 		slider.value = (float)parameters.currentAmmo / parameters.maxAmmo;
