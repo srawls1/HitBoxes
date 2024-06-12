@@ -1,14 +1,19 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
     [SerializeField] private BasicDamageAcceptor m_damageAcceptor;
     [SerializeField] private DamageTakenChannelSO channel;
+    [SerializeField] private float secondSliderLagTime;
+    [SerializeField] private float secondSliderChangeSpeed;
     [SerializeField] private bool adjustLengthWithMaxHP;
     [SerializeField] private float pixelLengthPerHP;
+    [SerializeField] private Slider mainSlider;
+    [SerializeField] private Slider secondSlider;
 
-    private Slider slider;
+    private WaitForSecondsRealtime secondSliderDelay;
 
     public BasicDamageAcceptor damageAcceptor
     {
@@ -34,7 +39,7 @@ public class HealthBar : MonoBehaviour
 
 	private void Awake()
     {
-        slider = GetComponent<Slider>();
+        secondSliderDelay = new WaitForSecondsRealtime(secondSliderLagTime);
     }
 
     private void Start()
@@ -74,10 +79,28 @@ public class HealthBar : MonoBehaviour
 			rectTransform.localPosition += Vector3.right * (endingWidth - startingWidth) * 0.5f;
 		}
 
-		slider.value = (float)newHP / maxHP;
+        secondSlider.value = mainSlider.value;
+		mainSlider.value = (float)newHP / maxHP;
+        StopAllCoroutines();
+        StartCoroutine(SetSecondSliderValueAfterDelay(newHP, maxHP));
     }
 
-    private void UpdateHealth_Healed(int newHP, int maxHP, int amount)
+
+	private IEnumerator SetSecondSliderValueAfterDelay(int newHP, int maxHP)
+	{
+        yield return secondSliderDelay;
+
+        float finalValue = (float)newHP / maxHP;
+
+        while (secondSlider.value != finalValue)
+		{
+            float newValue = Mathf.MoveTowards(secondSlider.value, finalValue, secondSliderChangeSpeed * Time.unscaledDeltaTime);
+            secondSlider.value = newValue;
+            yield return null;
+		}
+	}
+
+	private void UpdateHealth_Healed(int newHP, int maxHP, int amount)
     {
         if (adjustLengthWithMaxHP)
 		{
@@ -85,6 +108,8 @@ public class HealthBar : MonoBehaviour
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, pixelLengthPerHP * maxHP);
         }
         
-        slider.value = (float)newHP / maxHP;
+        mainSlider.value = (float)newHP / maxHP;
+        secondSlider.value = mainSlider.value;
+        StopAllCoroutines();
     }
 }
