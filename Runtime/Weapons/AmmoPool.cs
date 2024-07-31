@@ -14,6 +14,7 @@ public class AmmoPool : MonoBehaviour
 	[SerializeField] private int m_currentAmmo;
 	[SerializeField] private UnityEvent<AmmoChangedParameters> m_ammoChangedEvent;
 	[SerializeField] private AmmoChangedChannelSO ammoChangedChannel;
+	[SerializeField] private UnityEvent m_insufficientAmmoEvent;
 
 	public int maxAmmo
 	{
@@ -30,6 +31,11 @@ public class AmmoPool : MonoBehaviour
 	public UnityEvent<AmmoChangedParameters> ammoChangedEvent
 	{
 		get { return m_ammoChangedEvent; }
+	}
+
+	public UnityEvent insufficientAmmoEvent
+	{
+		get { return m_insufficientAmmoEvent; }
 	}
 
 	private void OnEnable()
@@ -50,7 +56,12 @@ public class AmmoPool : MonoBehaviour
 
 	public bool CanUse(int cost)
 	{
-		return currentAmmo >= cost;
+		bool canUse = currentAmmo >= cost;
+		if (!canUse)
+		{
+			insufficientAmmoEvent.Invoke();
+		}
+		return canUse;
 	}
 
     public bool UseAmmo(int cost)
