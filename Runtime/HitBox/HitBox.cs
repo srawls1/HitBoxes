@@ -150,11 +150,7 @@ public class HitBox : MonoBehaviour
 		interceptors.Clear();
 	}
 
-	#endregion // Public Functions
-
-	#region Private Functions
-
-	private void ProcessHit(HurtBox hurtBox)
+	public void ProcessHit(HurtBox hurtBox)
 	{
 		Damage.Builder builder = new Damage.Builder(type, this, hurtBox);
 		hurtBox.PreprocessHit(builder);
@@ -162,6 +158,10 @@ public class HitBox : MonoBehaviour
 		Damage damage = builder.Build();
 		hurtBox.TakeDamage(damage);
 	}
+
+	#endregion // Public Functions
+
+	#region Private Functions
 
 	private void Initialize()
     {
